@@ -2,6 +2,7 @@ package com.codecool.springtodo.controller;
 
 import com.codecool.springtodo.entity.Todo;
 import com.codecool.springtodo.repository.TodoRepository;
+import com.codecool.springtodo.service.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -19,8 +20,14 @@ public class TodoController {
 
     private static final String SUCCESS = "{\"success\":true}";
 
-    @PostMapping("/addTodo")
-    public ResponseEntity<String> addTodo() {
+    @PostMapping(value = "/addTodo", consumes = "application/x-www-form-urlencoded", produces = "application/x-www-form-urlencoded")
+    public ResponseEntity<String> addTodo(@RequestParam String title) {
+        Todo todo = Todo.builder()
+                .title(title)
+                .status(Status.ACTIVE)
+                .build();
+        System.out.println(todo);
+        todoRepository.save(todo);
         return ResponseEntity.ok(SUCCESS);
     }
 

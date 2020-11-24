@@ -67,7 +67,7 @@ class Controller {
      * Add an item and display it in the list.
      */
     addItem(title) {
-        this.sendAjax("addTodo", Controller.POST, "todo-title=" + title, function (data) {
+        this.sendAjax("addTodo", Controller.POST, "title=" + title, function (data) {
             this.view.clearNewTodo();
             this._refresh(true);
             this._checkResponse(data, "addTodo");
@@ -79,7 +79,7 @@ class Controller {
      */
     editItemSave(id, title) {
         if (title.length) {
-            this.sendAjax("todos/" + id, Controller.PUT, "todo-title=" + title, function (data) {
+            this.sendAjax("todos/" + id, Controller.PUT, "title=" + title, function (data) {
                 this.view.editItemDone(id, title);
                 this._checkResponse(data, "todos/" + id);
             });
