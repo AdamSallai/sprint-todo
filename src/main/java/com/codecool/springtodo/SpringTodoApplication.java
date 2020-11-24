@@ -29,14 +29,17 @@ public class SpringTodoApplication {
             Todo firstTodoItem = Todo.builder()
                     .title("first TODO item")
                     .status(Status.ACTIVE)
+                    .completed(false)
                     .build();
             Todo secondTodoItem = Todo.builder()
                     .title("second TODO item")
                     .status(Status.ACTIVE)
+                    .completed(false)
                     .build();
             Todo thirdTodoItem = Todo.builder()
                     .title("third TODO item")
                     .status(Status.ACTIVE)
+                    .completed(false)
                     .build();
 
             todoRepository.saveAll(List.of(firstTodoItem, secondTodoItem ,thirdTodoItem));

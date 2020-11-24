@@ -19,9 +19,11 @@ public class Todo {
     @GeneratedValue
     private Long todoId;
 
-
     private String title;
 
     @Enumerated(EnumType.STRING)
     private Status status;
+
+    private boolean completed;
+
 }

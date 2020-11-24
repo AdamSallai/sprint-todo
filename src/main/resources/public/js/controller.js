@@ -148,7 +148,6 @@ class Controller {
             // an item looks like: {id:abc, title:"something", completed:true}
             this.sendAjax("list", Controller.POST, "status=" + state, function (data) {
                 const respObj = JSON.parse(data);
-
                 this.view.showItems(respObj);
 
                 const total = respObj.length;

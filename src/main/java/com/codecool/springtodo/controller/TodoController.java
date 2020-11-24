@@ -25,24 +25,38 @@ public class TodoController {
         Todo todo = Todo.builder()
                 .title(title)
                 .status(Status.ACTIVE)
+                .completed(false)
                 .build();
-        System.out.println(todo);
         todoRepository.save(todo);
         return ResponseEntity.ok(SUCCESS);
     }
 
     @PostMapping("/list")
-    public List<Todo> listTodos() {
-        return todoRepository.findAll();
+    public List<Todo> listTodos(@RequestParam(required = false) String name) {
+        if (name == null) {
+            List<Todo> all = todoRepository.findAll();
+            System.out.println(all);
+            return all;
+        } else {
+            Status status = Status.enumConverter(name);
+            return todoRepository.findAllByStatus(status);
+        }
     }
 
     @DeleteMapping("/todos/completed")
     public ResponseEntity<String> completed() {
+
         return ResponseEntity.ok(SUCCESS);
     }
 
     @PutMapping("/todos/toggle_all")
-    public ResponseEntity<String> toggleAll() {
+    public ResponseEntity<String> toggleAll(@RequestParam(name = "toggle-all") Boolean toggle) {
+        System.out.println(toggle);
+        if(toggle) {
+            todoRepository.updateAllStatusesToComplete();
+        } else {
+            todoRepository.updateAllStatusesToActive();
+        }
         return ResponseEntity.ok(SUCCESS);
     }
 
