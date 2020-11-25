@@ -35,7 +35,6 @@ public class TodoController {
     public List<Todo> listTodos(@RequestParam(required = false) String name) {
         if (name == null) {
             List<Todo> all = todoRepository.findAll();
-            System.out.println(all);
             return all;
         } else {
             Status status = Status.enumConverter(name);
@@ -51,7 +50,6 @@ public class TodoController {
 
     @PutMapping("/todos/toggle_all")
     public ResponseEntity<String> toggleAll(@RequestParam(name = "toggle-all") Boolean toggle) {
-        System.out.println(toggle);
         if(toggle) {
             todoRepository.updateAllStatusesToComplete();
         } else {
@@ -60,23 +58,25 @@ public class TodoController {
         return ResponseEntity.ok(SUCCESS);
     }
 
-    @DeleteMapping("/todos/:id")
-    public ResponseEntity<String> deleteById() {
+    @DeleteMapping("/todos/{id}")
+    public ResponseEntity<String> deleteById(@PathVariable Long id) {
+        todoRepository.deleteById(id);
         return ResponseEntity.ok(SUCCESS);
     }
 
-    @PutMapping("/todos/:id")
-    public ResponseEntity<String> updateById() {
+    @PutMapping("/todos/{id}")
+    public ResponseEntity<String> updateById(@PathVariable Long id, @RequestParam String title) {
+        todoRepository.updateNameOfId(id, title);
         return ResponseEntity.ok(SUCCESS);
     }
 
-    @GetMapping("/todos/:id")
-    public ResponseEntity<String> getById() {
+    @GetMapping("/todos/{id}")
+    public ResponseEntity<String> getById(@PathVariable Long id) {
         return ResponseEntity.ok(SUCCESS);
     }
 
-    @PutMapping("/todos/:id/toggle_status")
-    public ResponseEntity<String> toggleStatusById() {
+    @PutMapping("/todos/{id}/toggle_status")
+    public ResponseEntity<String> toggleStatusById(@PathVariable Long id) {
         return ResponseEntity.ok(SUCCESS);
     }
 

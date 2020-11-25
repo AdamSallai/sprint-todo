@@ -24,4 +24,9 @@ public interface TodoRepository extends JpaRepository<Todo, Long> {
     @Modifying
     @Query("update Todo t set t.status = 'COMPLETE', t.completed = true where t.status = 'ACTIVE'")
     void updateAllStatusesToComplete();
+
+    @Transactional
+    @Modifying
+    @Query("update Todo t set t.title = :title where t.id = :id")
+    void updateNameOfId(Long id, String title);
 }
