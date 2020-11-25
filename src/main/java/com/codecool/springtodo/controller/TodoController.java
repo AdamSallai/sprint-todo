@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @CrossOrigin
@@ -32,19 +33,19 @@ public class TodoController {
     }
 
     @PostMapping("/list")
-    public List<Todo> listTodos(@RequestParam(required = false) String name) {
-        if (name == null) {
+    public List<Todo> listTodos(@RequestParam(required = false) String status) {
+        if (status.equals("")) {
             List<Todo> all = todoRepository.findAll();
             return all;
         } else {
-            Status status = Status.enumConverter(name);
-            return todoRepository.findAllByStatus(status);
+            Status realStatus = Status.enumConverter(status);
+            return todoRepository.findAllByStatus(realStatus);
         }
     }
 
     @DeleteMapping("/todos/completed")
     public ResponseEntity<String> completed() {
-
+        todoRepository.deleteAllByStatus(Status.COMPLETE);
         return ResponseEntity.ok(SUCCESS);
     }
 
@@ -72,11 +73,17 @@ public class TodoController {
 
     @GetMapping("/todos/{id}")
     public ResponseEntity<String> getById(@PathVariable Long id) {
-        return ResponseEntity.ok(SUCCESS);
+        Optional<Todo> todo = todoRepository.findById(id);
+        return todo.map(value -> ResponseEntity.ok(value.getTitle())).orElseGet(() -> ResponseEntity.ok(SUCCESS));
     }
 
     @PutMapping("/todos/{id}/toggle_status")
-    public ResponseEntity<String> toggleStatusById(@PathVariable Long id) {
+    public ResponseEntity<String> toggleStatusById(@PathVariable Long id, @RequestParam(name="status") boolean completed) {
+        if(!completed) {
+            todoRepository.updateStatusToActiveById(id);
+        }else {
+            todoRepository.updateStatusToCompleteById(id);
+        }
         return ResponseEntity.ok(SUCCESS);
     }
 
